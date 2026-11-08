@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scroll Pill Privacy Policy</title>
+  <meta name="description" content="How the Scroll Pill browser extension handles page information, settings, and permissions. It collects no data and makes no network requests.">
+  <link rel="canonical" href="https://phk-nord.github.io/scroll-pill-privacy/">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#0b1220">
+  <style>
+    :root {
+      --bg: #f4f6fb;
+      --surface: #ffffff;
+      --ink: #0f172a;
+      --muted: #566277;
+      --line: #dfe6f1;
+      --blue: #2563eb;
+      --blue-dark: #1e3a8a;
+      --navy: #0b1220;
+      --soft: #eaf1ff;
+      --soft-line: #c7dbfe;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .skip {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      z-index: 100;
+      background: var(--surface);
+      color: var(--blue);
+      padding: .75rem 1rem;
+      border-radius: 0 0 8px 0;
+    }
+
+    .skip:focus { left: 0; }
+
+    .wrap {
+      width: min(100% - 2rem, 820px);
+      margin-inline: auto;
+    }
+
+    .site-header {
+      background:
+        radial-gradient(circle at 12% 0%, rgba(59, 130, 246, .34), transparent 48%),
+        linear-gradient(135deg, #12275c 0%, #0b1220 58%, #070b14 100%);
+      color: #f8fafc;
+      border-bottom: 1px solid rgba(147, 197, 253, .18);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 2rem 0;
+    }
+
+    .header-inner img {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      flex: 0 0 auto;
+    }
+
+    .eyebrow {
+      margin: 0 0 .2rem;
+      color: #93c5fd;
+      font-size: .75rem;
+      font-weight: 650;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.9rem, 4vw, 2.65rem);
+      line-height: 1.1;
+      letter-spacing: -.025em;
+    }
+
+    main { padding: 2.5rem 0 4rem; }
+
+    .meta {
+      margin: 0 0 1.5rem;
+      color: var(--muted);
+      font-size: .925rem;
+    }
+
+    .lede {
+      margin: 0;
+      max-width: 68ch;
+      color: #1f2a3d;
+      font-size: 1.12rem;
+    }
+
+    h2 {
+      margin: 2.6rem 0 .7rem;
+      font-size: 1.35rem;
+      line-height: 1.25;
+      letter-spacing: -.012em;
+    }
+
+    h3 {
+      margin: 1.5rem 0 .35rem;
+      font-size: 1.02rem;
+      line-height: 1.35;
+    }
+
+    p { margin: .7rem 0; }
+
+    ul {
+      margin: .7rem 0;
+      padding-left: 1.3rem;
+    }
+
+    li { margin: .35rem 0; }
+
+    a {
+      color: var(--blue);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+
+    a:hover { color: var(--blue-dark); }
+
+    .callout {
+      margin: 1.6rem 0;
+      padding: 1.05rem 1.25rem;
+      background: var(--soft);
+      border: 1px solid var(--soft-line);
+      border-left: 5px solid var(--blue);
+      border-radius: 0 12px 12px 0;
+    }
+
+    .callout p { margin: 0; }
+
+    .callout p + p { margin-top: .55rem; }
+
+    .card {
+      margin: 1.25rem 0;
+      padding: 1.15rem 1.35rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, .04);
+    }
+
+    .card p:first-child { margin-top: 0; }
+    .card p:last-child { margin-bottom: 0; }
+
+    .table-wrap {
+      margin: 1rem 0;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .94rem;
+    }
+
+    caption {
+      padding: .85rem 1rem .1rem;
+      text-align: left;
+      font-weight: 650;
+    }
+
+    th, td {
+      padding: .7rem .9rem;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    thead th {
+      background: #eef3fb;
+      font-size: .82rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: #34517f;
+    }
+
+    tbody tr:last-child td { border-bottom: 0; }
+
+    code {
+      padding: .08em .34em;
+      border-radius: 4px;
+      background: #edf1f7;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: .88em;
+      overflow-wrap: anywhere;
+    }
+
+    .footer {
+      padding: 1.5rem 0 2.75rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .875rem;
+    }
+
+    .footer p { margin: .35rem 0; }
+
+    @media (max-width: 520px) {
+      .header-inner { padding: 1.5rem 0; }
+      .header-inner img { width: 46px; height: 46px; border-radius: 11px; }
+      main { padding-top: 2rem; }
+      h2 { margin-top: 2.2rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      .site-header { background: #fff; color: #000; border-bottom: 1px solid #ccc; }
+      .eyebrow { color: #333; }
+      .skip { display: none; }
+      a { color: #000; }
+      .card, .table-wrap { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <img src="icon.svg" alt="" width="56" height="56">
+      <div>
+        <p class="eyebrow">Scroll Pill</p>
+        <h1>Privacy Policy</h1>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+    <p class="meta">Effective 8 November 2026 · Applies to the Scroll Pill browser extension, version 1.0.0 and later</p>
+
+    <p class="lede">
+      Scroll Pill adds a floating control that jumps to the top or bottom of a page.
+      This policy explains what the extension reads, where anything goes, and the
+      choices you have.
+    </p>
+
+    <div class="callout" role="note">
+      <p><strong>In short:</strong> Scroll Pill does not collect, transmit, sell, or
+      share your data. It makes no network requests at all.</p>
+      <p>Everything happens locally in your browser. Your settings stay in your
+      browser profile, and there is no developer server, telemetry, analytics, or
+      advertising.</p>
+    </div>
+
+    <h2>What Scroll Pill handles</h2>
+
+    <h3>Page structure and scroll state</h3>
+    <p>
+      To decide what to scroll and where to place the pill, the extension reads the
+      current page locally: scroll positions, which elements can scroll, element
+      tags, ARIA roles, ids and class names, element positions and sizes, and a small
+      amount of computed style. This information is used only in the page you are
+      viewing and is discarded when the page closes. It is never stored or sent
+      anywhere.
+    </p>
+
+    <h3>Site colors (optional)</h3>
+    <p>
+      If you choose the <strong>Website colors</strong> design — or
+      <strong>Material You</strong> without a tint — the extension reads the page's
+      declared <code>theme-color</code> or works out its most prominent color from
+      header, navigation, button, and link styles, so the pill can match the site.
+      This is computed locally and is not retained.
+    </p>
+
+    <h3>Blocked sites</h3>
+    <p>
+      The extension compares the current page's hostname with your own blocklist so
+      the pill can stay hidden on sites you choose. The hostname is checked in
+      memory; it is not added to a history or sent anywhere.
+    </p>
+
+    <h3>Keyboard and pointer events</h3>
+    <p>
+      Scroll Pill listens for the <kbd>Shift</kbd> and <kbd>Escape</kbd> keys, and for
+      recent wheel, touch, key, and pointer activity, to support dragging, collapsing,
+      and deciding which container you most recently scrolled. It does not log,
+      record, or transmit keystrokes or pointer events.
+    </p>
+
+    <h3>Settings</h3>
+    <p>
+      Your preferences are stored with <code>chrome.storage.sync</code> inside your
+      browser profile: whether the pill is shown, pill and settings-page themes, the
+      dark-mode schedule times, the design and tint, idle transparency, position and
+      free-floating coordinates, the collapse breakpoint, the smooth-scrolling choice,
+      and your blocked-site list.
+    </p>
+
+    <h3>No browsing history or page content</h3>
+    <p>
+      Scroll Pill does not keep a history of pages, URLs, screenshots, text, form
+      values, or scroll positions. It does not read cookies, passwords, clipboard
+      contents, or autofill data.
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <caption>Data summary</caption>
+        <thead>
+          <tr>
+            <th scope="col">Data</th>
+            <th scope="col">Destination</th>
+            <th scope="col">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Page structure and scroll state</td>
+            <td>Stays in the page</td>
+            <td>Read locally to place and operate the control; never stored or sent.</td>
+          </tr>
+          <tr>
+            <td>Site theme color</td>
+            <td>Stays in the page</td>
+            <td>Used only for the Website colors and Material You designs.</td>
+          </tr>
+          <tr>
+            <td>Settings</td>
+            <td>Local browser storage</td>
+            <td><code>chrome.storage.sync</code>; may sync through your own Chrome profile if Chrome Sync is on.</td>
+          </tr>
+          <tr>
+            <td>Blocked-site list</td>
+            <td>Local browser storage</td>
+            <td>Same storage; the developer cannot see it.</td>
+          </tr>
+          <tr>
+            <td>Cookies, form data, clipboard, keystrokes, history</td>
+            <td>Not collected</td>
+            <td>Scroll Pill does not read these through extension APIs.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Where your data goes</h2>
+    <p>
+      Nowhere. Scroll Pill has no backend and makes no network requests. It does not
+      load remote scripts, styles, fonts, images, or advertising. All code ships in the
+      extension package.
+    </p>
+    <p>
+      <strong>Browser sync.</strong> <code>chrome.storage.sync</code> is provided by
+      your browser. If you enable Chrome Sync, Chrome may store your settings in your
+      Google account under Google's terms. The developer has no access to that data
+      and cannot retrieve or delete it.
+    </p>
+    <p>
+      <strong>No third parties.</strong> There is no analytics provider, crash
+      reporter, ad network, or data broker involved. The only external link in the
+      extension is the privacy-policy link on the settings page, which opens only when
+      you click it.
+    </p>
+
+    <h2>Permissions and why they exist</h2>
+    <ul>
+      <li>
+        <strong>Storage</strong> — saves the settings described above so they survive
+        restarts and, if you use Chrome Sync, follow your browser profile.
+      </li>
+      <li>
+        <strong>Read and change all your data on all websites</strong> — the pill has
+        to be available on whatever page you are reading, so the content script runs
+        on all sites. Its access is limited to the local page signals described above;
+        it does not modify page content.
+      </li>
+    </ul>
+    <p>
+      Scroll Pill requests no other permissions. It cannot access your tabs list,
+      downloads, bookmarks, clipboard, microphone, camera, or location.
+    </p>
+
+    <h2>What we do not do</h2>
+    <ul>
+      <li>We do not collect or receive any data from the extension.</li>
+      <li>We do not use telemetry, analytics, crash reporting, or remote assets.</li>
+      <li>We do not sell, rent, or share extension data with anyone.</li>
+      <li>We do not use data for personalized or retargeted advertising.</li>
+      <li>We do not read cookies, form fields, clipboard contents, or keystrokes.</li>
+      <li>We do not build a browsing history or profile of you.</li>
+      <li>We do not allow humans to read user data, because we never receive any.</li>
+    </ul>
+
+    <h2>Retention and deletion</h2>
+    <p>
+      Settings remain in <code>chrome.storage.sync</code> until you change them, clear
+      the extension's storage, or uninstall Scroll Pill. Removing the extension
+      removes its local data from your browser profile.
+    </p>
+    <p>
+      If Chrome Sync is enabled, a copy may remain in your Google account until it is
+      removed through your Google sync settings. Because we hold no server-side copy of
+      any data, there is nothing for us to delete on our side.
+    </p>
+
+    <h2>Security</h2>
+    <p>
+      Scroll Pill keeps its state in browser-provided storage and makes no network
+      requests, so there is no transmission to intercept. The pill is rendered in a
+      closed shadow root, which keeps page styles and the control isolated from each
+      other. No method of local storage is completely secure; protect your browser
+      profile and device.
+    </p>
+
+    <h2>Chrome Web Store Limited Use</h2>
+    <p>
+      Scroll Pill uses information only to provide its single purpose: offering
+      one-click navigation to the top or bottom of a page. Its handling of information
+      complies with the Chrome Web Store User Data Policy, including the Limited Use
+      requirements. We do not sell user data, use it for personalized advertising, or
+      allow humans to read it.
+    </p>
+
+    <h2>This website</h2>
+    <p>
+      This policy is hosted on GitHub Pages. The page is static, sets no cookies, and
+      runs no analytics or third-party scripts. GitHub, as the hosting provider, may
+      log visitor IP addresses for security and abuse prevention, as described in
+      <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub's Privacy Statement</a>.
+      The Scroll Pill extension itself does not contact this website or GitHub.
+    </p>
+
+    <h2>Children</h2>
+    <p>
+      Scroll Pill is a general-purpose productivity tool and is not directed to
+      children under 13. We do not knowingly collect personal information from
+      children, and the extension sends us no data at all.
+    </p>
+
+    <h2>Changes to this policy</h2>
+    <p>
+      We may update this policy when Scroll Pill changes. The effective date at the
+      top of this page will change, and the revision history for this public repository
+      records each version. Continued use of Scroll Pill after an update means you
+      accept the revised policy.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      For questions or privacy requests, open an issue at
+      <a href="https://github.com/phk-nord/scroll-pill-privacy/issues">github.com/phk-nord/scroll-pill-privacy/issues</a>.
+      GitHub issues are public, so please do not include sensitive personal data.
+    </p>
+
+    <div class="card">
+      <p><strong>Publisher:</strong> infiniteLink</p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>Scroll Pill — Home and End as a floating button for Chromium-based browsers.</p>
+      <p>This repository contains the public privacy policy only. The extension source is maintained separately.</p>
+    </div>
+  </footer>
+</body>
+</html>
